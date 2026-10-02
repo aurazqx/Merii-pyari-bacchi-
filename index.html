@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090713">
+<title>A Little Birthday Surprise ✨</title>
+<style>
+:root{
+  --bg:#090713; --pink:#ff7bbd; --rose:#ff4f9a; --cream:#fff4fb;
+  --glass:rgba(255,255,255,.075); --line:rgba(255,255,255,.15);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:white;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+body{overflow:hidden}
+button{font:inherit}
+.scene{position:fixed;inset:0;display:grid;place-items:center;opacity:0;pointer-events:none;transform:scale(1.035);transition:opacity 1s ease,transform 1.25s cubic-bezier(.2,.8,.2,1);overflow:hidden}
+.scene.active{opacity:1;pointer-events:auto;transform:scale(1)}
+.scene::before{content:"";position:absolute;inset:-15%;background:
+ radial-gradient(circle at 20% 20%,rgba(255,91,164,.20),transparent 28%),
+ radial-gradient(circle at 80% 70%,rgba(164,107,255,.18),transparent 30%),
+ radial-gradient(circle at 50% 50%,rgba(255,255,255,.04),transparent 42%);
+filter:blur(10px);animation:ambient 10s ease-in-out infinite alternate}
+@keyframes ambient{to{transform:scale(1.12) rotate(2deg);filter:blur(18px)}}
+.content{position:relative;z-index:5;width:min(92vw,720px);text-align:center}
+.kicker{letter-spacing:.28em;text-transform:uppercase;font-size:.72rem;color:#ffd2ea;opacity:.8}
+h1{font-size:clamp(2.2rem,9vw,5.2rem);line-height:.95;margin:.45em 0;font-weight:800;letter-spacing:-.045em}
+h2{font-size:clamp(1.7rem,7vw,3.3rem);margin:.35em 0}
+p{color:#eadfea;line-height:1.7;font-size:clamp(.95rem,3.8vw,1.15rem)}
+.glass{background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 20px 80px rgba(0,0,0,.35);border-radius:28px;padding:24px}
+.cta{border:0;border-radius:999px;padding:14px 24px;background:linear-gradient(135deg,#ff77bb,#a46bff);color:#fff;font-weight:800;box-shadow:0 12px 35px rgba(255,83,164,.28);cursor:pointer;transition:.25s transform}
+.cta:active{transform:scale(.96)}
+#pinScene{background:radial-gradient(circle at 50% 45%,#26102b,#090713 65%)}
+.lock{font-size:4rem;margin-bottom:10px;animation:float 3.5s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-10px)}}
+.pinbox{display:flex;justify-content:center;gap:10px;margin:24px 0}
+.dot{width:13px;height:13px;border-radius:50%;border:1px solid #d8b8cc;background:transparent;transition:.2s}
+.dot.on{background:#ff83bf;box-shadow:0 0 18px #ff65ad}
+.keypad{display:grid;grid-template-columns:repeat(3,64px);gap:10px;justify-content:center}
+.key{width:64px;height:52px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:#fff;cursor:pointer;font-size:1.05rem}
+.key:active{transform:scale(.93);background:rgba(255,255,255,.13)}
+.shake{animation:shake .42s}
+@keyframes shake{25%{transform:translateX(-8px)}50%{transform:translateX(8px)}75%{transform:translateX(-5px)}}
+#introScene{background:linear-gradient(160deg,#120916,#26122b 55%,#090713)}
+.intro-title{opacity:0;transform:translateY(28px);animation:reveal 1.3s .35s forwards}
+.intro-sub{opacity:0;transform:translateY(18px);animation:reveal 1.2s 1s forwards}
+@keyframes reveal{to{opacity:1;transform:none}}
+.spark{position:absolute;width:5px;height:5px;border-radius:50%;background:#fff;box-shadow:0 0 15px #fff;animation:twinkle 2.5s ease-in-out infinite}
+@keyframes twinkle{50%{opacity:.15;transform:scale(.35)}}
+#balloonScene{background:linear-gradient(180deg,#090713,#160d20)}
+.balloon{position:absolute;bottom:-18vh;width:54px;height:72px;border-radius:52% 48% 48% 52%;background:linear-gradient(135deg,#ffb3d8,#ff4f9a);box-shadow:inset -10px -10px 18px rgba(80,0,50,.15),0 15px 35px rgba(255,60,150,.16);animation:rise var(--dur) linear infinite;animation-delay:var(--delay);left:var(--left);transform:rotate(var(--rot))}
+.balloon::after{content:"";position:absolute;width:1px;height:120px;background:rgba(255,255,255,.45);left:50%;top:68px}
+.balloon::before{content:"";position:absolute;bottom:-5px;left:50%;border:5px solid transparent;border-top-color:#ff83bf;transform:translateX(-50%)}
+@keyframes rise{to{transform:translateY(-125vh) translateX(50px) rotate(calc(var(--rot) * -1));}}
+.btitle{position:relative;z-index:6;text-shadow:0 5px 30px rgba(255,91,164,.25)}
+.gallery{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding:10px 4vw 26px;scrollbar-width:none}
+.gallery::-webkit-scrollbar{display:none}
+.card{flex:0 0 min(78vw,310px);height:min(66vh,510px);scroll-snap-align:center;border-radius:26px;overflow:hidden;position:relative;background:#15111b;border:1px solid rgba(255,255,255,.16);box-shadow:0 20px 60px rgba(0,0,0,.45)}
+.card img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.95);transform:scale(1.03);transition:transform 1s ease}
+.card:hover img{transform:scale(1.08)}
+.card::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 55%,rgba(0,0,0,.62))}
+.card span{position:absolute;z-index:2;bottom:18px;left:18px;right:18px;font-weight:700;font-size:1rem;text-align:left}
+.progress{height:4px;background:rgba(255,255,255,.12);border-radius:99px;width:min(70vw,380px);margin:4px auto 20px;overflow:hidden}
+.progress i{display:block;width:20%;height:100%;background:linear-gradient(90deg,#ff72b6,#c68bff);transition:.4s}
+.cake{width:180px;height:90px;background:linear-gradient(#ff9bc9,#ff6eae);border-radius:18px 18px 28px 28px;margin:85px auto 20px;position:relative;box-shadow:0 30px 70px rgba(255,80,165,.22)}
+.cake:before{content:"";position:absolute;left:0;right:0;top:-25px;height:42px;background:#fff0f7;border-radius:50% 50% 20% 20%;box-shadow:inset 0 -7px #ffd0e6}
+.candle{position:absolute;width:8px;height:38px;background:#fff;top:-57px;left:50%;transform:translateX(-50%);border-radius:5px}
+.flame{position:absolute;width:15px;height:22px;background:#ffd56e;border-radius:50% 50% 45% 45%;top:-22px;left:50%;transform:translateX(-50%);box-shadow:0 0 22px #ff9c55;animation:flicker .35s infinite alternate}
+@keyframes flicker{to{transform:translateX(-50%) scale(.78) translateY(2px)}}
+.prayer{font-size:1.15rem;max-width:600px;margin:0 auto}
+.gift{font-size:6rem;cursor:pointer;display:inline-block;filter:drop-shadow(0 15px 30px rgba(255,92,170,.25));animation:giftfloat 2.8s ease-in-out infinite}
+@keyframes giftfloat{50%{transform:translateY(-10px) rotate(2deg)}}
+.final{background:radial-gradient(circle at 50% 50%,#31112d,#090713 67%)}
+.hearts span{position:absolute;bottom:-30px;font-size:22px;animation:heart 5s linear infinite;left:var(--x);animation-delay:var(--d)}
+@keyframes heart{to{transform:translateY(-120vh) rotate(25deg);opacity:0}}
+.small{font-size:.82rem;opacity:.65}
+.hidden{display:none}
+</style>
+</head>
+<body>
+
+<section id="pinScene" class="scene active">
+  <div class="content glass" id="pinBox">
+    <div class="lock">🔐</div>
+    <div class="kicker">A tiny secret awaits</div>
+    <h2>Enter the secret PIN</h2>
+    <p>Only the right two numbers can unlock this surprise.</p>
+    <div class="pinbox"><i class="dot"></i><i class="dot"></i></div>
+    <div class="keypad">
+      <button class="key">1</button><button class="key">2</button><button class="key">3</button>
+      <button class="key">4</button><button class="key">5</button><button class="key">6</button>
+      <button class="key">7</button><button class="key">8</button><button class="key">9</button>
+      <button class="key" data-clear>⌫</button><button class="key">0</button><button class="key" data-go>✓</button>
+    </div>
+    <div class="small" style="margin-top:15px">Hint: it's written in the little note 😉</div>
+  </div>
+</section>
+
+<section id="introScene" class="scene">
+  <div class="content">
+    <div class="kicker intro-title">A little cinematic surprise</div>
+    <h1 class="intro-title">Today is<br><span style="color:#ff8bc5">your day.</span></h1>
+    <p class="intro-sub">So I made a tiny world just for this moment.</p>
+    <button class="cta intro-sub" onclick="go('balloonScene')">Begin the surprise ✨</button>
+  </div>
+</section>
+
+<section id="balloonScene" class="scene">
+  <div id="balloons"></div>
+  <div class="content btitle">
+    <div class="kicker">The sky is celebrating</div>
+    <h1>Happy Birthday 🎈</h1>
+    <p>And this is only the beginning…</p>
+    <button class="cta" onclick="go('photosScene')">Next →</button>
+  </div>
+</section>
+
+<section id="photosScene" class="scene">
+  <div class="content" style="width:100%;max-width:1000px">
+    <div class="kicker">A few beautiful memories</div>
+    <h2>Some moments ✨</h2>
+    <div class="gallery" id="gallery">
+      <div class="card"><img src="photos/photo1.jpg"><span>One of those smiles you remember.</span></div>
+      <div class="card"><img src="photos/photo2.jpg"><span>A little moment, a lot of warmth.</span></div>
+      <div class="card"><img src="photos/photo3.jpg"><span>Simply, beautifully you.</span></div>
+      <div class="card"><img src="photos/photo4.jpg"><span>Another frame worth keeping.</span></div>
+      <div class="card"><img src="photos/photo5.jpg"><span>And one more for the memory box. 💗</span></div>
+    </div>
+    <div class="progress"><i id="prog"></i></div>
+    <button class="cta" onclick="go('cakeScene')">Next →</button>
+  </div>
+</section>
+
+<section id="cakeScene" class="scene">
+  <div class="content">
+    <div class="kicker">Make a wish</div>
+    <div class="cake"><div class="candle"><div class="flame"></div></div></div>
+    <h2>One wish. One beautiful year ahead. 🎂</h2>
+    <p class="prayer">May the coming year bring you peaceful days, genuine smiles, beautiful surprises and all the little things that make life feel special.</p>
+    <button class="cta" onclick="go('giftScene')">Next →</button>
+  </div>
+</section>
+
+<section id="giftScene" class="scene">
+  <div class="content">
+    <div class="kicker">There is one last thing</div>
+    <h2>A little gift is waiting…</h2>
+    <div class="gift" onclick="openGift()">🎁</div>
+    <p id="giftText">Tap the gift.</p>
+  </div>
+</section>
+
+<section id="finalScene" class="scene final">
+  <div class="hearts">
+    <span style="--x:8%;--d:0s">♥</span><span style="--x:22%;--d:1.2s">♡</span>
+    <span style="--x:40%;--d:2.4s">♥</span><span style="--x:61%;--d:.6s">♡</span>
+    <span style="--x:78%;--d:1.8s">♥</span><span style="--x:92%;--d:3s">♡</span>
+  </div>
+  <div class="content">
+    <div class="kicker">The end of the little movie</div>
+    <h1>Happy Birthday 💗</h1>
+    <p>Keep smiling. Keep being you. And keep making ordinary days feel a little more special.</p>
+    <div class="small">Made with a lot of thought ✨</div>
+  </div>
+</section>
+
+<script>
+const scenes=[...document.querySelectorAll('.scene')];
+function go(id){
+  scenes.forEach(s=>s.classList.remove('active'));
+  const target=document.getElementById(id);
+  target.classList.add('active');
+  if(id==='balloonScene') makeBalloons();
+}
+let pin='';
+const dots=[...document.querySelectorAll('.dot')];
+document.querySelectorAll('.key').forEach(k=>{
+  k.onclick=()=>{
+    if(k.dataset.clear){pin=''; dots.forEach(d=>d.classList.remove('on'));return}
+    if(k.dataset.go){
+      if(pin==='69') { go('introScene'); pin=''; }
+      else {
+        document.getElementById('pinBox').classList.remove('shake');
+        void document.getElementById('pinBox').offsetWidth;
+        document.getElementById('pinBox').classList.add('shake');
+        pin=''; dots.forEach(d=>d.classList.remove('on'));
+      }
+      return;
+    }
+    if(pin.length<2){
+      pin+=k.textContent.trim();
+      dots[pin.length-1].classList.add('on');
+      if(pin.length===2) setTimeout(()=>document.querySelector('[data-go]').click(),260);
+    }
+  }
+});
+function makeBalloons(){
+  const wrap=document.getElementById('balloons');
+  if(wrap.children.length)return;
+  for(let i=0;i<18;i++){
+    const b=document.createElement('div');
+    b.className='balloon';
+    b.style.setProperty('--left',(Math.random()*100)+'%');
+    b.style.setProperty('--dur',(8+Math.random()*8)+'s');
+    b.style.setProperty('--delay',(-Math.random()*10)+'s');
+    b.style.setProperty('--rot',((Math.random()*18)-9)+'deg');
+    wrap.appendChild(b);
+  }
+}
+const gallery=document.getElementById('gallery');
+gallery.addEventListener('scroll',()=>{
+  const max=gallery.scrollWidth-gallery.clientWidth;
+  document.getElementById('prog').style.width=Math.max(20,Math.min(100,20+(gallery.scrollLeft/max)*80))+'%';
+});
+function openGift(){
+  document.querySelector('.gift').style.transform='scale(1.2) rotate(-4deg)';
+  document.getElementById('giftText').innerHTML='✨ Surprise unlocked!<br><button class="cta" style="margin-top:16px" onclick="go(\\'finalScene\\')">Open the final message 💌</button>';
+}
+</script>
+</body>
+</html>
